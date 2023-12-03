@@ -1,0 +1,32 @@
+- name: Demo of restore plan
+  hosts: localhost
+  gather_facts: False
+  vars:
+    datacenters: {
+        cabinets: {
+          servers: [
+            {
+              name: Server1,
+              id: 1
+            },
+            {
+              name: SERVER1,
+              id: 2
+            },
+            {
+              name: Server2,
+              id: 3
+            },
+            {
+              name: server1,
+              id: 4
+            },
+          ]
+        }
+      }
+  tasks:
+    - debug:
+        msg: "{{ item.name }}"
+      with_items:
+        - "{{ datacenters.cabinets.servers }}"
+      when: item.name|lower == "server1"

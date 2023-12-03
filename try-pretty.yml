@@ -1,0 +1,29 @@
+---
+- name: selectattr example - Vaccination Report
+  hosts: localhost
+  gather_facts: false
+  vars:
+    indians:
+      userdata:
+        - name: Shanmugam
+          gender: male
+          mobile: "9875643210"
+          dose1completed: yes
+          dose2completed: yes
+          age: "25"
+          city: pudukottai
+          state: Tamilnadu
+        - name: Abdul
+          gender: male
+          mobile: "9875632341"
+          dose1completed: no
+          dose2completed: no
+          age: "45"
+          city: Hosur
+          state: Tamilnadu
+  tasks:
+    - debug:
+        msg: "{{ item.name }}"
+      with_items:
+        - "{{ indians.userdata }}"
+      when: item.name == "Abdul"
