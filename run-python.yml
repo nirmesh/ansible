@@ -1,0 +1,19 @@
+---
+- name: Run Python Script
+  hosts: localhost
+  become: true  # If you need elevated privileges
+
+  tasks:
+    # - name: Copy the Python script to the remote host
+    #   copy:
+    #     src: /path/to/your/local/example_script.py
+    #     dest: /path/on/remote/host/example_script.py
+    #     mode: 0755  # Make the script executable
+
+    - name: Run the Python script
+      script: ./test.py
+      register: python_result
+      
+    - name: Get stdout or stderr from the output
+      debug:
+        var: python_result.stdout
