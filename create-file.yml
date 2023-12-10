@@ -1,0 +1,11 @@
+---
+- hosts: localhost
+  tasks:
+    - name: Ansible command module multiple commands
+      command: touch {{ item }}
+      with_items:
+        - hello.txt
+        - hello1.txt
+        - hello2.txt
+      args:
+         chdir: /home/vagrant/

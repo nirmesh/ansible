@@ -1,0 +1,10 @@
+---
+- hosts: localhost
+  tasks:
+    - name: Ansible command module multiple commands
+      file:
+        path: "/home/vagrant/{{ item }}"
+        state: absent
+      with_items:
+        - deleteme5.txt
+      
