@@ -1,0 +1,13 @@
+- name: Go down the JSON file 2 levels
+  hosts: localhost
+  vars:
+    input: "{{ lookup('file','output.json') | from_json }}"
+
+  tasks:
+   - name: Create interfaces Dictionary
+     set_fact:
+       interfaces: "{{ input.parsed.interfaces }}"
+
+   - name: Print out interfaces
+     debug:
+       var: interfaces

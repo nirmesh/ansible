@@ -1,0 +1,24 @@
+---
+- name: Example of JSON body parsing with uri module
+  connection: local
+  gather_facts: true
+  hosts: localhost
+  tasks:
+
+    - name: Example of JSON body parsing with uri module
+      uri: 
+        url: https://jsonplaceholder.typicode.com/users
+        method: GET
+        return_content: yes
+        status_code: 200
+        body_format: json
+      register: data
+      # failed_when: <optional condition based on JSON returned content>
+
+    - name: Print returned json dictionary
+      debug:
+        var: data.json
+
+    - name: Print certain element
+      debug:
+        var: data.json[0].address.city
