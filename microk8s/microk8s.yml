@@ -1,0 +1,37 @@
+---
+- hosts: microk8s
+  become: true  # Gain root privileges
+  remote_user: genai-nirmesh
+  tasks:
+    - name: Update package lists
+      apt: update_cache=yes
+
+    - name: Install required packages
+      apt:
+        name:
+          - snapd
+          - jq
+          - curl
+
+    - name: Install microk8s using snap
+      snap:
+        name: microk8s
+        classic: yes  # Classic confinement for full functionality
+
+    - name: Add user to "microk8s" group for access to Kubernetes resources
+      user:
+        name: "genai-nirmesh"  # Replace with your username
+        groups: microk8s
+        append: yes
+
+    - name: Start microk8s
+      command: microk8s start
+    - name: create alias to kubectl microk8s
+      command: snap alias microk8s.kubectl kubectl
+  
+      
+  #    - name: Add a line to a file if the file does not exist, without passing regexp
+  # ansible.builtin.lineinfile:
+  #   path: /tmp/testfile
+  #   line: 192.168.1.99 foo.lab.net foo
+  #   create: yes
