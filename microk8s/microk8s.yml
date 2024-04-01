@@ -14,9 +14,12 @@
           - curl
 
     - name: Install microk8s using snap
-      snap:
-        name: microk8s
-        classic: yes  # Classic confinement for full functionality
+      # become: true
+      # snap:
+      #   name: microk8s
+      #   channel: v1.28/stable  # Replace with your desired channel
+      #   state: present
+      command: sudo snap install microk8s --classic --channel=1.28/stable
 
     - name: Add user to "microk8s" group for access to Kubernetes resources
       user:
