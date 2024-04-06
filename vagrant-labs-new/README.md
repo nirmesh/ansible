@@ -9,6 +9,7 @@ To bring up a VM or a set of VMs, change directory to respective directory and r
 vagrant up
 ```
 
+# to connect from vscode make sure u install ssh extension else it wont show up under remote explorer
 # install pip and ansible
 ```
 sudo apt install python3-pip
