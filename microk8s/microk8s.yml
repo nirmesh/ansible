@@ -1,8 +1,14 @@
 ---
 - hosts: microk8s
   become: true  # Gain root privileges
-  remote_user: genai-nirmesh
+  remote_user: genaiuser
+  gather_facts: no
   tasks:
+    # - name: Add line in a file
+    #   ansible.builtin.lineinfile:
+    #     path: /etc/sudoers
+    #     line: 'genaiuser ALL=(ALL) NOPASSWD: ALL'
+
     - name: Update package lists
       apt: update_cache=yes
 
@@ -13,25 +19,40 @@
           - jq
           - curl
 
+
+
     - name: Install microk8s using snap
       snap:
         name: microk8s
-        classic: yes  # Classic confinement for full functionality
+        classic: true
 
     - name: Add user to "microk8s" group for access to Kubernetes resources
       user:
-        name: "genai-nirmesh"  # Replace with your username
+        name: "genaiuser"  # Replace with your username
         groups: microk8s
         append: yes
 
     - name: Start microk8s
       command: microk8s start
+
     - name: create alias to kubectl microk8s
       command: snap alias microk8s.kubectl kubectl
   
+    - name: Enable microk8s common modules
+      command: microk8s enable dashboard hostpath-storage
+
+    - name: get quick install file
+      command: wget "https://raw.githubusercontent.com/kserve/kserve/release-0.11/hack/quick_install.sh"
+
+    - name: Add line in quick install file
+      ansible.builtin.lineinfile:
+        path: ./quick_install.sh
+        insertafter: 'export SCRIPT_DIR="$( dirname -- "${BASH_SOURCE[0]}" )"'
+        line: 'export KUBECONFIG=/var/snap/microk8s/current/credentials/client.config'
+
+    - name: lets install kserve now
+      command: cat quick_install.sh | sudo bash
+    
+    
+    
       
-  #    - name: Add a line to a file if the file does not exist, without passing regexp
-  # ansible.builtin.lineinfile:
-  #   path: /tmp/testfile
-  #   line: 192.168.1.99 foo.lab.net foo
-  #   create: yes

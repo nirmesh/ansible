@@ -1,0 +1,9 @@
+---
+- hosts: localhost
+  become: true
+  gather_facts: no
+  tasks:
+    - name: Add line in a file
+      ansible.builtin.lineinfile:
+        path: /etc/sudoers
+        line: 'vagrant ALL=(ALL) NOPASSWD: ALL'
