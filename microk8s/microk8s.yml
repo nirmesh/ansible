@@ -4,10 +4,10 @@
   remote_user: genaiuser
   gather_facts: no
   tasks:
-    # - name: Add line in a file
-    #   ansible.builtin.lineinfile:
-    #     path: /etc/sudoers
-    #     line: 'genaiuser ALL=(ALL) NOPASSWD: ALL'
+    - name: Add line in a file
+      ansible.builtin.lineinfile:
+        path: /etc/sudoers
+        line: 'genaiuser ALL=(ALL) NOPASSWD: ALL'
 
     - name: Update package lists
       apt: update_cache=yes
@@ -47,11 +47,16 @@
     - name: Add line in quick install file
       ansible.builtin.lineinfile:
         path: ./quick_install.sh
-        insertafter: 'export SCRIPT_DIR="$( dirname -- "${BASH_SOURCE[0]}" )"'
+        insertafter: 'export ISTIO_VERSION=1.17.2'
         line: 'export KUBECONFIG=/var/snap/microk8s/current/credentials/client.config'
+    - name: Find out playbook's path
+      shell: pwd
+      register: playbook_path_output
+    - debug: var=playbook_path_output.stdout
 
-    - name: lets install kserve now
-      command: cat quick_install.sh | sudo bash
+    # - name: lets install kserve now
+    #   become: true 
+    #   command:  sudo bash quick_install.sh
     
     
     
